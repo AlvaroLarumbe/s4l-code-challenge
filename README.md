@@ -1,1 +1,1 @@
-# s4l-code-challenge
+# StayForLong code challenge
