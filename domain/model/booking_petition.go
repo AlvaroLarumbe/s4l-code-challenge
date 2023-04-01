@@ -3,9 +3,9 @@ package model
 import "time"
 
 type BookingPetition struct {
-	petitionId  string
-	checkIn     time.Time
-	nights      int
-	sellingRate int
-	margin      int
+	PetitionId  string
+	CheckIn     time.Time
+	Nights      int
+	SellingRate int
+	Margin      int
 }

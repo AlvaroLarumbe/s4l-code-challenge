@@ -4,6 +4,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"os"
+	"s4l-code-challenge/application/usecase"
 	"s4l-code-challenge/infrastructure/api"
 	"time"
 )
@@ -13,7 +14,8 @@ func main() {
 
 	log.Info().Msg("API started!")
 
-	httpServer := api.NewServer("0.0.0.0:8090")
+	// TODO: improve this by using any Dependency Injection library
+	httpServer := api.NewServer("0.0.0.0:8090", usecase.NewStatsCalculateUseCase())
 	err := httpServer.Start()
 
 	if err != nil {

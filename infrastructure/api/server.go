@@ -2,17 +2,21 @@ package api
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/rs/zerolog/log"
 	"net/http"
+	"s4l-code-challenge/application/usecase"
 )
 
 type Server struct {
-	listenAddress string
+	listenAddress         string
+	statsCalculateUseCase usecase.StatsCalculateUseCase
 }
 
-func NewServer(listenAddress string) Server {
+func NewServer(listenAddress string, statsCalculateUseCase usecase.StatsCalculateUseCase) Server {
 	return Server{
-		listenAddress: listenAddress,
+		listenAddress:         listenAddress,
+		statsCalculateUseCase: statsCalculateUseCase,
 	}
 }
 
@@ -30,10 +34,19 @@ func (s Server) writeNotFoundError(response http.ResponseWriter) {
 	s.writeError(response, http.StatusNotFound, "Not Found")
 }
 
-func (s Server) writeError(response http.ResponseWriter, code int, message string) {
-	response.Header().Set("Content-Type", "application/json")
-	response.WriteHeader(code)
+func (s Server) writeBadRequestError(response http.ResponseWriter) {
+	s.writeError(response, http.StatusBadRequest, "Bad Request, please check your data")
+}
 
+func (s Server) writeMissingFieldError(response http.ResponseWriter, field string) {
+	s.writeError(response, http.StatusBadRequest, fmt.Sprintf("Field %s is missing", field))
+}
+
+func (s Server) writeInternalServerError(response http.ResponseWriter) {
+	s.writeError(response, http.StatusInternalServerError, "Internal Server Error")
+}
+
+func (s Server) writeError(response http.ResponseWriter, code int, message string) {
 	errorResponse := ErrorResponse{
 		Message: message,
 	}
