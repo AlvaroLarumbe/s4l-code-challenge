@@ -26,7 +26,7 @@ func NewServer(
 	}
 }
 
-func (s Server) Start() error {
+func (s Server) CreateServeMux() *http.ServeMux {
 	handler := http.NewServeMux()
 
 	// TODO: improve route handling using any library to handle both methods and paths
@@ -34,7 +34,11 @@ func (s Server) Start() error {
 	handler.Handle("/stats", http.HandlerFunc(s.statsHandler))
 	handler.Handle("/maximize", http.HandlerFunc(s.maximizeHandler))
 
-	return http.ListenAndServe(s.listenAddress, handler)
+	return handler
+}
+
+func (s Server) Start() error {
+	return http.ListenAndServe(s.listenAddress, s.CreateServeMux())
 }
 
 func (s Server) writeNotFoundError(response http.ResponseWriter) {
