@@ -15,7 +15,12 @@ func main() {
 	log.Info().Msg("API started!")
 
 	// TODO: improve this by using any Dependency Injection library
-	httpServer := api.NewServer("0.0.0.0:8090", usecase.NewStatsCalculateUseCase())
+	statsCalculateUseCase := usecase.NewStatsCalculateUseCase()
+	httpServer := api.NewServer(
+		"0.0.0.0:8090",
+		statsCalculateUseCase,
+		usecase.NewMaximizeCalculateUseCase(statsCalculateUseCase),
+	)
 	err := httpServer.Start()
 
 	if err != nil {

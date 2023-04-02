@@ -56,8 +56,8 @@ func (suite *StatsCalculateUseCaseTestSuite) TestExecuteWhenSomeRequestsAreGiven
 	})
 
 	expected := model.Stats{
-		AvgNight: 15.874667,
-		MinNight: 8.184,
+		AvgNight: 15.874666666666664,
+		MinNight: 8.184000000000001,
 		MaxNight: 26,
 	}
 

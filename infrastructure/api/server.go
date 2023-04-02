@@ -9,14 +9,20 @@ import (
 )
 
 type Server struct {
-	listenAddress         string
-	statsCalculateUseCase usecase.StatsCalculateUseCase
+	listenAddress            string
+	statsCalculateUseCase    usecase.StatsCalculateUseCase
+	maximizeCalculateUseCase usecase.MaximizeCalculateUseCase
 }
 
-func NewServer(listenAddress string, statsCalculateUseCase usecase.StatsCalculateUseCase) Server {
+func NewServer(
+	listenAddress string,
+	statsCalculateUseCase usecase.StatsCalculateUseCase,
+	maximizeCalculateUseCase usecase.MaximizeCalculateUseCase,
+) Server {
 	return Server{
-		listenAddress:         listenAddress,
-		statsCalculateUseCase: statsCalculateUseCase,
+		listenAddress:            listenAddress,
+		statsCalculateUseCase:    statsCalculateUseCase,
+		maximizeCalculateUseCase: maximizeCalculateUseCase,
 	}
 }
 
@@ -26,6 +32,7 @@ func (s Server) Start() error {
 	// TODO: improve route handling using any library to handle both methods and paths
 	handler.Handle("/health", http.HandlerFunc(s.healthHandler))
 	handler.Handle("/stats", http.HandlerFunc(s.statsHandler))
+	handler.Handle("/maximize", http.HandlerFunc(s.maximizeHandler))
 
 	return http.ListenAndServe(s.listenAddress, handler)
 }

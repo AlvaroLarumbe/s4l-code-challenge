@@ -1,7 +1,7 @@
 package model
 
 type Stats struct {
-	AvgNight float32
-	MinNight float32
-	MaxNight float32
+	AvgNight float64
+	MinNight float64
+	MaxNight float64
 }

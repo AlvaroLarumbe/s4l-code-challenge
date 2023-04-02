@@ -5,14 +5,15 @@ import (
 	"errors"
 	"github.com/rs/zerolog/log"
 	"io"
+	"math"
 	"net/http"
 	"s4l-code-challenge/domain/model"
 )
 
 type statsResponse struct {
-	AvgNight float32 `json:"avg_night"`
-	MinNight float32 `json:"min_night"`
-	MaxNight float32 `json:"max_night"`
+	AvgNight float64 `json:"avg_night"`
+	MinNight float64 `json:"min_night"`
+	MaxNight float64 `json:"max_night"`
 }
 
 func (s Server) statsHandler(response http.ResponseWriter, request *http.Request) {
@@ -35,7 +36,7 @@ func (s Server) statsHandler(response http.ResponseWriter, request *http.Request
 		log.Error().Err(err).Msg("Cannot unmarshal request body")
 	}
 
-	err = validateRequest(s, response, requestList)
+	err = validateStatsRequest(s, response, requestList)
 
 	if err != nil {
 		// API error already handled in validator function
@@ -63,14 +64,14 @@ func (s Server) statsHandler(response http.ResponseWriter, request *http.Request
 		response,
 		http.StatusOK,
 		statsResponse{
-			AvgNight: stats.AvgNight,
-			MinNight: stats.MinNight,
-			MaxNight: stats.MaxNight,
+			AvgNight: math.Floor(stats.AvgNight*100) / 100,
+			MinNight: math.Floor(stats.MinNight*100) / 100,
+			MaxNight: math.Floor(stats.MaxNight*100) / 100,
 		},
 	)
 }
 
-func validateRequest(
+func validateStatsRequest(
 	s Server,
 	response http.ResponseWriter,
 	requestList []BookingPetitionRequest,

@@ -11,10 +11,10 @@ func NewStatsCalculateUseCase() StatsCalculateUseCase {
 
 func (u StatsCalculateUseCase) Execute(bookingPetitionList []model.BookingPetition) model.Stats {
 	var stats model.Stats
-	var profitsPerNight []float32
+	var profitsPerNight []float64
 
 	for i, petition := range bookingPetitionList {
-		profitPerNight := (float32(petition.SellingRate*petition.Margin) / 100) / float32(petition.Nights)
+		profitPerNight := (float64(petition.SellingRate*petition.Margin) / 100) / float64(petition.Nights)
 		profitsPerNight = append(profitsPerNight, profitPerNight)
 
 		// Keep minimum
@@ -34,7 +34,7 @@ func (u StatsCalculateUseCase) Execute(bookingPetitionList []model.BookingPetiti
 	}
 
 	if len(profitsPerNight) > 0 {
-		stats.AvgNight = stats.AvgNight / float32(len(profitsPerNight))
+		stats.AvgNight = stats.AvgNight / float64(len(profitsPerNight))
 	}
 
 	return stats
