@@ -25,31 +25,31 @@ func (suite *MaximizeCalculateUseCaseTestSuite) SetupTest() {
 func (suite *MaximizeCalculateUseCaseTestSuite) TestExecuteWhenSomeRequestsAreGiven() {
 	actual := suite.useCase.Execute([]model.BookingPetition{
 		{
-			PetitionId:  "::request-id-1::",
+			PetitionId:  "::request-id-1::", // Profit per night = 8.4
 			CheckIn:     time.Date(2023, 1, 1, 0, 0, 0, 0, time.UTC),
 			Nights:      5,
 			SellingRate: 200,
-			Margin:      20,
+			Margin:      21,
 		},
 		{
-			PetitionId:  "::request-id-2::",
+			PetitionId:  "::request-id-2::", // Profit per night = 1.95
 			CheckIn:     time.Date(2023, 1, 4, 0, 0, 0, 0, time.UTC),
 			Nights:      4,
 			SellingRate: 156,
 			Margin:      5,
 		},
 		{
-			PetitionId:  "::request-id-3::",
+			PetitionId:  "::request-id-3::", // Profit per night = 2.25
 			CheckIn:     time.Date(2023, 1, 4, 0, 0, 0, 0, time.UTC),
 			Nights:      4,
 			SellingRate: 150,
 			Margin:      6,
 		},
 		{
-			PetitionId:  "::request-id-4::",
+			PetitionId:  "::request-id-4::", // Profit per night = 12.525
 			CheckIn:     time.Date(2023, 1, 10, 0, 0, 0, 0, time.UTC),
 			Nights:      4,
-			SellingRate: 160,
+			SellingRate: 167,
 			Margin:      30,
 		},
 	})
@@ -59,10 +59,10 @@ func (suite *MaximizeCalculateUseCaseTestSuite) TestExecuteWhenSomeRequestsAreGi
 			"::request-id-1::",
 			"::request-id-4::",
 		},
-		TotalProfit: 88,
-		AvgNight:    10,
-		MinNight:    8,
-		MaxNight:    12,
+		TotalProfit: 92.1,
+		AvgNight:    10.4625,
+		MinNight:    8.4,
+		MaxNight:    12.525,
 	}
 
 	assert.Equal(suite.T(), expected, actual)

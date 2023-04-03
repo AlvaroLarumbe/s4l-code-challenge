@@ -1,6 +1,8 @@
 package api
 
 import (
+	"errors"
+	"net/http"
 	"s4l-code-challenge/domain/model"
 	"s4l-code-challenge/helper"
 	"time"
@@ -30,4 +32,51 @@ func (r BookingPetitionRequest) toModel() (*model.BookingPetition, error) {
 		SellingRate: r.SellingRate.MustGet(),
 		Margin:      r.Margin.MustGet(),
 	}, nil
+}
+
+func validateRequest(
+	s Server,
+	response http.ResponseWriter,
+	requestList []BookingPetitionRequest,
+) error {
+	if len(requestList) == 0 {
+		s.writeBadRequestError(response)
+
+		return errors.New("no requests given")
+	}
+
+	for _, request := range requestList {
+		if !request.PetitionId.IsDefined() {
+			// TODO: try to improve this raw JSON name with reflection or some validation library
+			s.writeMissingFieldError(response, "request_id")
+
+			return errors.New("missing field")
+		}
+
+		if !request.CheckIn.IsDefined() {
+			s.writeMissingFieldError(response, "check_in")
+
+			return errors.New("missing field")
+		}
+
+		if !request.Nights.IsDefined() {
+			s.writeMissingFieldError(response, "nights")
+
+			return errors.New("missing field")
+		}
+
+		if !request.SellingRate.IsDefined() {
+			s.writeMissingFieldError(response, "selling_rate")
+
+			return errors.New("missing field")
+		}
+
+		if !request.Margin.IsDefined() {
+			s.writeMissingFieldError(response, "margin")
+
+			return errors.New("missing field")
+		}
+	}
+
+	return nil
 }
